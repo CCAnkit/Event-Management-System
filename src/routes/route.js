@@ -20,17 +20,17 @@ const { userAuth } = require("../middlewares/auth.js");
 
 
 // User API's
-router.post('/user/register', createUser);
+router.post('/user/register', createUser);      // Create User
 
-router.post('/user/login', login);
+router.post('/user/login', login);        // User Login
 
-router.get('/user/logout', logout);
+router.get('/user/logout', logout);             // User Logout
 
-router.put('/user/changePassword/:userId', userAuth, changePassword);
+router.put('/user/changePassword/:userId', userAuth, changePassword);      // User can change his Password
 
-router.put('/user/forgotPassword', forgotPassword);
+router.put('/user/forgotPassword', forgotPassword);       // If user forgot his Password
 
-router.post('/user/resetPassword', resetPassword);
+router.post('/user/resetPassword', resetPassword);       // User can reset his passwor
 
 
 // Event API's
