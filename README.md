@@ -2,7 +2,7 @@
 
 API Base URL:
 ```sh
-http://localhost:5000/api
+http://localhost:3000/
 ```
 User Endpoints:
 1. Register User: 
