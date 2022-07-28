@@ -184,33 +184,6 @@ const logout = async (req, res) => {
     }
 };
 
-// --------------------------------- Get User Details ---------------------------------------
-
-const getUserDetails = async (req, res) => {
-    try {
-
-      // const userIdFromParams = req.params.userId;
-
-      // const userIdFromToken = req.userId
-
-      // if (!validator.isValidObjectId(userIdFromParams)){
-      //     return res.status(400).send({status: false , message: `${userIdFromParams} is not valid type user Id`})    //Checking if user Id is a valid type Object Id or not
-      // }
-      // let user = await userModel.findById(userIdFromParams).lean()       //Validate: The userId is valid or not.
-      // if (!user) {
-      //     return res.status(404).send({status: false, message: "User does not exists"})     
-      // }
-      // if (userIdFromToken != userIdFromParams) {
-      //     return res.status(403).send({status: false, message: "Unauthorized Access."});
-      // }
-      
-      // return res.status(200).send({status: true, message: "User Details" , data: user})
-        
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ status: false, msg: err.message });
-    }
-  };
 
 // --------------------------------- Change Password ---------------------------------------
 
@@ -225,7 +198,6 @@ const changePassword = async (req, res) => {
         return res
           .status(400)
           .send({ status: false, message: "Please provide the valid UserId" })
-    
     
     const userDetails = await userModel.findById(userId).lean()
     
@@ -297,11 +269,9 @@ const forgotPassword = async (req, res) => {
             msg: "Your password is successfully changed"})
       
       } else {
-      
-        return res
-          .status(401)
-          .send({ status: false, msg: "Unauthorized Access" })
-      
+          return res
+            .status(401)
+            .send({ status: false, msg: "Unauthorized Access" })
       }
       
     } catch (err) {
@@ -336,19 +306,18 @@ const resetPassword = async (req, res) => {
           .send({ status: false, msg: 'Email is not correct, Please check your credentials again' })
         
       const token = await jwt.sign({
-        userId: user._id,
-        email: email,   
-        iat: Math.floor(Date.now() / 1000),
-        // exp: Math.floor(Date.now() / 1000) + (10*60*60)
-          }, "Outshade" || JWT_SECRET, {expiresIn: "12h" }); 
+          userId: user._id,
+          email: email,   
+          iat: Math.floor(Date.now() / 1000),
+          // exp: Math.floor(Date.now() / 1000) + (10*60*60)
+      }, "Outshade" || JWT_SECRET, {expiresIn: "12h" }); 
     
-
       var transport = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-            user: "8b0d6cdc6c82df",
-            pass: "e5fe02dc487f3f",
+          host: "smtp.mailtrap.io",
+          port: 2525,
+          auth: {
+              user: "8b0d6cdc6c82df",
+              pass: "e5fe02dc487f3f",
           } 
       });
 
@@ -366,21 +335,15 @@ const resetPassword = async (req, res) => {
         };
 
       transport.sendMail(mailData, async(error, info) => {
-        
-        if (error) {
-          
+        if (error) {   
           console.log(error);
-          
           return res
             .status(500)
             .send({ status: false, msg: error.message });
 
         } else {
-        
             console.log('Email sent: ' + info.response);
-               
             await userModel.findOneAndUpdate({ _id: user._id }, {$set: { forgotToken: token }})
-            
             return res.status(200).send({
               type: "success", 
               status:true, 
@@ -398,7 +361,6 @@ const resetPassword = async (req, res) => {
 module.exports = {  createUser, 
                     login, 
                     logout, 
-                    getUserDetails, 
                     changePassword, 
                     forgotPassword, 
                     resetPassword  
